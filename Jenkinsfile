@@ -13,27 +13,27 @@ pipeline {
     }
     stage('Test') {
       steps {
-        // Add your tests here (e.g., npm test, pytest, etc.)
-        echo 'Running tests...'
+        // Run your tests (e.g., npm test, pytest, etc.)
+        sh 'npm test'  // Replace with your test command
       }
     }
     stage('Docker Build') {
       steps {
-        sh 'docker build -t aditya1018/my-web-app .'  // Replace aditya1018/my-web-app with your actual Docker image name
+        sh 'docker build -t username/my-web-app .'  // Replace username/my-web-app with your actual Docker image name
       }
     }
     stage('Push to Docker Hub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
           sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-          sh 'docker push aditya1018/my-web-app'  // Replace aditya1018/my-web-app with your actual Docker image name
+          sh 'docker push username/my-web-app'  // Replace username/my-web-app with your actual Docker image name
         }
       }
     }
     stage('Deploy to Kubernetes') {
       steps {
-        // Deployment to Kubernetes will be handled by Kubernetes deployment YAML files
-        echo 'Deploying to Kubernetes...'
+        // Example of deploying to Kubernetes using kubectl
+        sh 'kubectl apply -f k8s/deployment.yaml'  // Replace with your actual Kubernetes deployment YAML path
       }
     }
   }
