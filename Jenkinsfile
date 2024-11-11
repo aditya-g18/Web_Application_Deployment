@@ -8,31 +8,32 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'npm install'
+        sh 'npm install'  // Installs npm dependencies
       }
     }
     stage('Test') {
       steps {
         echo 'Skipping tests for now...'
-        // You can add test commands when you're ready to add them.
+        // Add test commands here when ready (e.g., npm test)
       }
     }
     stage('Docker Build') {
       steps {
-        sh 'docker build -t username/my-web-app .'
+        sh 'docker build -t aditya1018/my-web-app .'  // Ensure this matches your actual Docker image name
       }
     }
     stage('Push to Docker Hub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
           sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-          sh 'docker push username/my-web-app'
+          sh 'docker push aditya1018/my-web-app'  // Ensure this matches your Docker image name
         }
       }
     }
     stage('Deploy to Kubernetes') {
       steps {
         echo 'Deploying to Kubernetes...'
+        // Add Kubernetes deployment commands here
       }
     }
   }
