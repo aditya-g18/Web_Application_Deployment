@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Clone') {
       steps {
-        git 'https://github.com/aditya-g18/Web_Application_Deployment.git'
+        git branch: 'main', url: 'https://github.com/aditya-g18/Web_Application_Deployment.git'
       }
     }
     stage('Build') {
@@ -19,13 +19,15 @@ pipeline {
     }
     stage('Docker Build') {
       steps {
-        sh 'docker build -t your-username/my-web-app .'  // Replace with your actual Docker image name
+        sh 'docker build -t aditya1018/my-web-app .'  // Replace aditya1018/my-web-app with your actual Docker image name
       }
     }
     stage('Push to Docker Hub') {
       steps {
-        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-        sh 'docker push your-username/my-web-app'  // Replace with your Docker image name
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+          sh 'docker push aditya1018/my-web-app'  // Replace aditya1018/my-web-app with your actual Docker image name
+        }
       }
     }
     stage('Deploy to Kubernetes') {
